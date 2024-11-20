@@ -13,4 +13,5 @@ public interface MemberMapper {
     int join(JoinMemberRequest request) throws SQLException;
     MemberDto login(LoginMemberRequest request) throws SQLException;
     void saveRefreshToken(Map<String, String> map) throws SQLException;
+    void deleteRefreshToken(Map<String, String> map) throws SQLException;
 }

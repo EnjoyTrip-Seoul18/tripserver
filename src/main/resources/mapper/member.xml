@@ -34,4 +34,10 @@
         where member_id = #{memberId}
     </update>
 
+    <update id="deleteRefreshToken" parameterType="map">
+        update member
+        set token = #{refreshToken, jdbcType=VARCHAR}
+        where member_id = #{memberId}
+    </update>
+
 </mapper>

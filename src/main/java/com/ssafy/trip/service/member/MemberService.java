@@ -8,4 +8,5 @@ public interface MemberService {
     int join(JoinMemberRequest request) throws Exception;
     MemberDto login(LoginMemberRequest request) throws Exception;
     void saveRefreshToken(String memberId, String refreshToken) throws Exception;
+    void deleteRefreshToken(String memberId) throws Exception;
 }

@@ -6,6 +6,7 @@ import com.ssafy.trip.dto.member.LoginMemberRequest;
 import com.ssafy.trip.dto.member.MemberDto;
 import com.ssafy.trip.service.member.MemberService;
 import com.ssafy.trip.util.JWTUtil;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,5 +79,21 @@ public class MemberController {
     }
 
 
+    // 로그아웃
+    @Operation(summary = "로그아웃", description = "회원 정보를 담은 Token 을 제거한다.")
+    @GetMapping("/logout/{memberId}")
+    public ResponseEntity<?> removeToken(@PathVariable ("memberId") @Parameter(description = "로그아웃 할 회원의 아이디.", required = true) String memberId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.ACCEPTED;
+        try {
+            memberService.deleteRefreshToken(memberId);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            log.error("로그아웃 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
 
 }

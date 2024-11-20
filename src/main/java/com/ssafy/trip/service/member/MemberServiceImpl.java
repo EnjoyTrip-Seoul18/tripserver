@@ -32,7 +32,15 @@ public class MemberServiceImpl implements MemberService {
         Map<String, String> map = new HashMap<>();
         map.put("memberId", memberId);
         map.put("refreshToken", refreshToken);
-        System.out.println("memberId: "+ map.get("memberId")+" refreshToken: "+map.get("refreshToken"));
+//        System.out.println("memberId: "+ map.get("memberId")+" refreshToken: "+map.get("refreshToken"));
         memberMapper.saveRefreshToken(map);
+    }
+
+    @Override
+    public void deleteRefreshToken(String memberId) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("refreshToken", null);
+        memberMapper.deleteRefreshToken(map);
     }
 }
