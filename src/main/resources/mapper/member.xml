@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.trip.mapper.member.MemberMapper">
+
+    <resultMap type="memberDto" id="member">
+        <result column="member_id" property="memberId"/>
+        <result column="member_name" property="memberName"/>
+        <result column="member_pwd" property="memberPwd"/>
+        <result column="email" property="email"/>
+        <result column="address" property="address"/>
+        <result column="join_date" property="joinDate"/>
+        <result column="token" property="refreshToken"/>
+    </resultMap>
+
+    <!--회원 가입-->
+    <insert id="join" parameterType="JoinMemberRequest">
+        INSERT INTO member (member_id, member_name, member_pwd, address, email, join_date)
+        VALUES (#{memberId}, #{memberName}, #{memberPwd}, #{email}, #{address}, NOW())
+    </insert>
+
+    <!-- 로그인 -->
+    <select id="login" resultMap="member" parameterType="LoginMemberRequest">
+        select member_id, member_name, token
+        from member
+        where member_id = #{memberId} and member_pwd = #{memberPwd}
+    </select>
+
+    <!-- refreshToken 저장 -->
+    <update id="saveRefreshToken" parameterType="map">
+        update member
+        set token = #{refreshToken}
+        where member_id = #{memberId}
+    </update>
+
+</mapper>
