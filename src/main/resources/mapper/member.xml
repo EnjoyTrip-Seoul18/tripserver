@@ -40,4 +40,11 @@
         where member_id = #{memberId}
     </update>
 
+    <!-- 회원 정보 수정 -->
+    <update id="updateMember" parameterType="UpdateMemberRequest">
+        UPDATE member
+        SET member_name = #{memberName}, email = #{email}, address = #{address}
+        WHERE member_id = #{memberId}
+    </update>
+
 </mapper>

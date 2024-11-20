@@ -4,6 +4,7 @@ package com.ssafy.trip.controller.member;
 import com.ssafy.trip.dto.member.JoinMemberRequest;
 import com.ssafy.trip.dto.member.LoginMemberRequest;
 import com.ssafy.trip.dto.member.MemberDto;
+import com.ssafy.trip.dto.member.UpdateMemberRequest;
 import com.ssafy.trip.service.member.MemberService;
 import com.ssafy.trip.util.JWTUtil;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -96,4 +97,18 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    // 회원정보수정
+    @Operation(summary = "회원정보수정", description = "회원정보(이룸, 이메일, 주소)를 수정한다.")
+    @PostMapping("/update")
+    public ResponseEntity<?> updateMember(@RequestBody @Parameter(description = "수정할 회원의 정보들 ", required = true) UpdateMemberRequest request) {
+        try {
+            memberService.updateMember(request);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.debug("회원정보수정 에러 발생 : {}", e);
+            Map<String, Object> result = new HashMap<>();
+            result.put("message", e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }       
+    }
 }

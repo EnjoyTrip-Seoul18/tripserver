@@ -3,6 +3,7 @@ package com.ssafy.trip.service.member;
 import com.ssafy.trip.dto.member.JoinMemberRequest;
 import com.ssafy.trip.dto.member.LoginMemberRequest;
 import com.ssafy.trip.dto.member.MemberDto;
+import com.ssafy.trip.dto.member.UpdateMemberRequest;
 import com.ssafy.trip.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.parsers.KotlinCoroutinesReturnTypeParser;
@@ -42,5 +43,10 @@ public class MemberServiceImpl implements MemberService {
         map.put("memberId", memberId);
         map.put("refreshToken", null);
         memberMapper.deleteRefreshToken(map);
+    }
+
+    @Override
+    public int updateMember(UpdateMemberRequest request) throws Exception {
+        return memberMapper.updateMember(request);
     }
 }
