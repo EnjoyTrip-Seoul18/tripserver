@@ -68,6 +68,7 @@ public class MemberController {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.debug("로그인 에러 발생 : {}", e);
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -86,6 +87,7 @@ public class MemberController {
             memberService.deleteRefreshToken(memberId);
             status = HttpStatus.OK;
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("로그아웃 실패 : {}", e);
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -101,6 +103,7 @@ public class MemberController {
             memberService.updateMember(request);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             log.debug("회원정보수정 에러 발생 : {}", e);
             Map<String, Object> result = new HashMap<>();
             result.put("message", e.getMessage());
@@ -117,6 +120,7 @@ public class MemberController {
             memberService.deleteMember(memberId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             result.put("message", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -140,6 +144,7 @@ public class MemberController {
                 resultMap.put("userInfo", infoMember);
                 status = HttpStatus.OK;
             } catch (Exception e) {
+                e.printStackTrace();
                 log.error("정보조회 실패 : {}", e);
                 resultMap.put("message", e.getMessage());
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
