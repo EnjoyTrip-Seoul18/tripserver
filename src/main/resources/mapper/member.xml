@@ -14,6 +14,15 @@
         <result column="token" property="refreshToken"/>
     </resultMap>
 
+    <!--  회원정보  -->
+    <resultMap type="InfoMemberResponse" id="InfoMemberResponse">
+        <result column="member_id" property="memberId"/>
+        <result column="member_name" property="memberName"/>
+        <result column="email" property="email"/>
+        <result column="address" property="address"/>
+        <result column="join_date" property="joinDate"/>
+    </resultMap>
+
     <!--회원 가입-->
     <insert id="join" parameterType="JoinMemberRequest">
         INSERT INTO member (member_id, member_name, member_pwd, address, email, join_date)
@@ -47,4 +56,16 @@
         WHERE member_id = #{memberId}
     </update>
 
+    <!-- 회원 탈퇴 -->
+    <delete id="deleteMember">
+        DELETE FROM member
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <!-- 회원 정보 -->
+    <select id="memberInfo" parameterType="string" resultMap="InfoMemberResponse">
+        select member_id, member_name, email, address, join_date
+        from member
+        where member_id = #{memberId}
+    </select>
 </mapper>

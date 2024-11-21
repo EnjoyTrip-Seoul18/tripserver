@@ -1,12 +1,8 @@
 package com.ssafy.trip.service.member;
 
-import com.ssafy.trip.dto.member.JoinMemberRequest;
-import com.ssafy.trip.dto.member.LoginMemberRequest;
-import com.ssafy.trip.dto.member.MemberDto;
-import com.ssafy.trip.dto.member.UpdateMemberRequest;
+import com.ssafy.trip.dto.member.*;
 import com.ssafy.trip.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.parsers.KotlinCoroutinesReturnTypeParser;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -49,4 +45,16 @@ public class MemberServiceImpl implements MemberService {
     public int updateMember(UpdateMemberRequest request) throws Exception {
         return memberMapper.updateMember(request);
     }
+
+    @Override
+    public int deleteMember(String memberId) throws Exception {
+        return memberMapper.deleteMember(memberId);
+    }
+
+    @Override
+    public InfoMemberResponse memberInfo(String memberId) throws Exception {
+        return memberMapper.memberInfo(memberId);
+    }
+
+
 }
