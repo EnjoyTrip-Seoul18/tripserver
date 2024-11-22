@@ -76,11 +76,10 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-
     // 로그아웃
     @Operation(summary = "로그아웃", description = "회원 정보를 담은 Token 을 제거한다.")
-    @GetMapping("/logout/{memberId}")
-    public ResponseEntity<?> removeToken(@PathVariable ("memberId") @Parameter(description = "로그아웃 할 회원의 아이디.", required = true) String memberId) {
+    @GetMapping("/logout")
+    public ResponseEntity<?> removeToken(@RequestAttribute("userId") String memberId) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
@@ -97,10 +96,10 @@ public class MemberController {
 
     // 회원정보수정
     @Operation(summary = "회원정보수정", description = "회원정보(이룸, 이메일, 주소)를 수정한다.")
-    @PostMapping("/update")
-    public ResponseEntity<?> updateMember(@RequestBody @Parameter(description = "수정할 회원의 정보들 ", required = true) UpdateMemberRequest request) {
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateMember(@RequestAttribute("userId") String memberId, @RequestBody @Parameter(description = "수정할 회원의 정보들 ", required = true) UpdateMemberRequest request) {
         try {
-            memberService.updateMember(request);
+            memberService.updateMember(memberId, request);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,8 +112,8 @@ public class MemberController {
 
     // 회원 탈퇴
     @Operation(summary = "회원탈퇴", description = "해당 회원을 탈퇴한다.")
-    @DeleteMapping("/delete/{memberId}")
-    public ResponseEntity<?> deleteMember(@PathVariable ("memberId") @Parameter(description = "탈퇴할 회원의 아이디.", required = true) String  memberId) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteMember(@RequestAttribute("userId") String  memberId) {
         Map<String, Object> result = new HashMap<>();
         try {
             memberService.deleteMember(memberId);
@@ -126,33 +125,33 @@ public class MemberController {
         }
     }
 
-    @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
-    @GetMapping("/info")
-    public ResponseEntity<Map<String, Object>> getInfo(
-            @RequestHeader("Authorization") String header) {
-        log.debug("header : {} ", header);
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        String memberId = jwtUtil.getUserId(header);
-
-//		if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
-        if (jwtUtil.checkToken(header)) {
-            log.info("사용 가능한 토큰!!!");
-            try {
-//				로그인 사용자 정보.
-                InfoMemberResponse infoMember = memberService.memberInfo(memberId);
-                resultMap.put("userInfo", infoMember);
-                status = HttpStatus.OK;
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error("정보조회 실패 : {}", e);
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
-        } else {
-            log.error("사용 불가능 토큰!!!");
-            status = HttpStatus.UNAUTHORIZED;
-        }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
+//    @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
+//    @GetMapping("/info")
+//    public ResponseEntity<Map<String, Object>> getInfo(
+//            @RequestAttribute("userId") String memberId) {
+//        log.debug("header : {} ", header);
+//        Map<String, Object> resultMap = new HashMap<>();
+//        HttpStatus status = HttpStatus.ACCEPTED;
+//        String memberId = jwtUtil.getUserId(header);
+//
+////		if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
+//        if (jwtUtil.checkToken(header)) {
+//            log.info("사용 가능한 토큰!!!");
+//            try {
+////				로그인 사용자 정보.
+//                InfoMemberResponse infoMember = memberService.memberInfo(memberId);
+//                resultMap.put("userInfo", infoMember);
+//                status = HttpStatus.OK;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                log.error("정보조회 실패 : {}", e);
+//                resultMap.put("message", e.getMessage());
+//                status = HttpStatus.INTERNAL_SERVER_ERROR;
+//            }
+//        } else {
+//            log.error("사용 불가능 토큰!!!");
+//            status = HttpStatus.UNAUTHORIZED;
+//        }
+//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+//    }
 }

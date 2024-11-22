@@ -1,24 +1,20 @@
 package com.ssafy.trip.config;
 
-import com.ssafy.trip.interceptor.JWTInterceptor;
+import com.ssafy.trip.interceptor.AuthorizationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 
 @Configuration
 @EnableWebMvc
 public class WebConfiguration implements WebMvcConfigurer {
 	
-	private JWTInterceptor jwtInterceptor;
+	private AuthorizationInterceptor authorizationInterceptor;
 
-	public WebConfiguration(JWTInterceptor jwtInterceptor) {
+	public WebConfiguration(AuthorizationInterceptor authorizationInterceptor) {
 		super();
-		this.jwtInterceptor = jwtInterceptor;
+		this.authorizationInterceptor = authorizationInterceptor;
 	}
 
 	@Override
@@ -41,11 +37,20 @@ public class WebConfiguration implements WebMvcConfigurer {
 			.maxAge(1800); // Pre-flight Caching
 	}
 
-//	@Override
-//	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(jwtInterceptor);
-//	}
-
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		System.out.println("registered check");
+		registry.addInterceptor(authorizationInterceptor)
+				.excludePathPatterns(
+						"/v3/api-docs/**",
+						"/swagger-ui/**",
+						"/swagger-resources/**",
+						"/test1",
+						"/member/login",
+						"/member/join"
+				);
+		//주의: 인터셉터에서 동일한 엔드포인트 url인데 HTTP METHOD가 다른경우 구분 불가능
+	}
 //	Swagger UI 실행시 404처리
 //	Swagger2 일경우
 	@Override

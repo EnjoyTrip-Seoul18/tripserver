@@ -2,6 +2,7 @@ package com.ssafy.trip.mapper.member;
 
 import com.ssafy.trip.dto.member.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -12,7 +13,7 @@ public interface MemberMapper {
     MemberDto login(LoginMemberRequest request) throws SQLException;
     void saveRefreshToken(Map<String, String> map) throws SQLException;
     void deleteRefreshToken(Map<String, String> map) throws SQLException;
-    int updateMember(UpdateMemberRequest request) throws SQLException;
+    int updateMember(@Param("memberId") String memberId, @Param("request") UpdateMemberRequest request) throws SQLException;
     int deleteMember(String memberId) throws SQLException;
     InfoMemberResponse memberInfo(String memberId) throws SQLException;
 }
