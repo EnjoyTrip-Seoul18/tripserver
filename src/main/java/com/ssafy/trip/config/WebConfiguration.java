@@ -46,7 +46,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 						"/swagger-ui/**",
 						"/swagger-resources/**",
 						"/test1",
-						"/member/login"
+						"/member/login",
+						"/member/join"
 				);
 		//주의: 인터셉터에서 동일한 엔드포인트 url인데 HTTP METHOD가 다른경우 구분 불가능
 	}

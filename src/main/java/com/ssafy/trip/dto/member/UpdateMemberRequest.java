@@ -10,8 +10,8 @@ import lombok.*;
 @ToString
 public class UpdateMemberRequest {
 
-    @Schema(description = "아이디")
-    private String memberId;
+//    @Schema(description = "아이디")
+//    private String memberId;
     @Schema(description = "이름")
     private String memberName;
     @Schema(description = "이메일")

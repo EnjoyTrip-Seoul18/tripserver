@@ -7,7 +7,7 @@ public interface MemberService {
     MemberDto login(LoginMemberRequest request) throws Exception;
     void saveRefreshToken(String memberId, String refreshToken) throws Exception;
     void deleteRefreshToken(String memberId) throws Exception;
-    int updateMember(UpdateMemberRequest request) throws Exception;
+    int updateMember(String memberId, UpdateMemberRequest request) throws Exception;
     int deleteMember(String memberId) throws Exception;
     InfoMemberResponse memberInfo(String memberId) throws Exception;
 }

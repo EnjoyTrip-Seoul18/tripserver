@@ -50,9 +50,9 @@
     </update>
 
     <!-- 회원 정보 수정 -->
-    <update id="updateMember" parameterType="UpdateMemberRequest">
+    <update id="updateMember" parameterType="map">
         UPDATE member
-        SET member_name = #{memberName}, email = #{email}, address = #{address}
+        SET member_name = #{request.memberName}, email = #{request.email}, address = #{request.address}
         WHERE member_id = #{memberId}
     </update>
 
