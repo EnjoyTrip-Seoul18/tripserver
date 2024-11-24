@@ -15,6 +15,8 @@ public class BoardDto {
     private int boardId;
     @Schema(description = "작성자 아이디")
     private String memberId;
+    @Schema(description = "작성자 이름")
+    private String memberName;
     @Schema(description = "글제목")
     private String subject;
     @Schema(description = "글내용")
