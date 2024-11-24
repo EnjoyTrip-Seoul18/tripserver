@@ -56,5 +56,10 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.memberInfo(memberId);
     }
 
+    @Override
+    public int idCheck(String memberId) throws Exception {
+        return memberMapper.idCheck(memberId);
+    }
+
 
 }

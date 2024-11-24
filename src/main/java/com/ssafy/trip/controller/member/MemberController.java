@@ -140,4 +140,17 @@ public class MemberController {
             return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    // 아이디조회
+    @PostMapping("/idCheck")
+    public ResponseEntity<?> idCheck(@RequestBody String memberId) {
+        try {
+            int cnt = memberService.idCheck(memberId);
+            log.info("memberId : {}, cnt : {}", memberId, cnt);
+            return new ResponseEntity<Integer>(cnt, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        }
+    }
 }
