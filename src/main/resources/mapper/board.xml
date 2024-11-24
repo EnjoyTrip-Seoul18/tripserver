@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.trip.mapper.board.BoardMapper">
+
+    <resultMap type="boardDto" id="article">
+        <result column="board_id" property="boardId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="subject" property="subject"/>
+        <result column="content" property="content"/>
+        <result column="hit" property="hit"/>
+        <result column="register_time" property="registerTime"/>
+    </resultMap>
+
+
+    <insert id="writeArticle" parameterType="map">
+        insert into board (member_id, subject, content, hit, register_time)
+        values (#{memberId}, #{request.subject}, #{request.content}, 0, now())
+        <selectKey resultType="int" keyProperty="boardId" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+</mapper>
