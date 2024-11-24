@@ -73,4 +73,15 @@
         set hit = hit + 1
         where board_id = #{boardId}
     </update>
+
+    <update id="modifyArticle" parameterType="map">
+        update board
+        set subject = #{request.subject}, content = #{request.content}
+        where board_id = #{boardId} and member_id = #{memberId}
+    </update>
+
+    <delete id="deleteArticle">
+        delete from board
+        where board_id = #{boardId} and member_id = #{memberId}
+    </delete>
 </mapper>
