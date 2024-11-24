@@ -10,4 +10,5 @@ public interface MemberService {
     int updateMember(String memberId, UpdateMemberRequest request) throws Exception;
     int deleteMember(String memberId) throws Exception;
     InfoMemberResponse memberInfo(String memberId) throws Exception;
+    int idCheck(String memberId) throws Exception;
 }
