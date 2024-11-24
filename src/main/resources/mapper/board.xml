@@ -35,13 +35,18 @@
     </insert>
 
     <sql id="search">
-        <if test="word != null and word != ''">
-            <if test="key == 'subject'">
-                and subject like concat('%', #{word}, '%')
-            </if>
-            <if test="key != 'subject'">
-                and ${key} = #{word}
-            </if>
+        <if test="key != null and key != '' and word != null and word != ''">
+            <choose>
+                <when test="key == 'subject'">
+                    AND subject LIKE CONCAT('%', #{word}, '%')
+                </when>
+                <when test="key == 'user_id'">
+                    AND b.user_id = #{word}
+                </when>
+                <otherwise>
+                    AND ${key} = #{word}
+                </otherwise>
+            </choose>
         </if>
     </sql>
 

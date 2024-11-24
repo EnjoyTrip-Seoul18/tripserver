@@ -16,7 +16,7 @@ public interface BoardMapper {
     void writeArticle(@Param("memberId") String memberId, @Param("request") WriteBoardRequest request) throws SQLException;
     List<BoardDto> listArticle(Map<String, Object> param) throws SQLException;
     int getTotalArticleCount(Map<String, Object> param) throws SQLException;
-    BoardDto getArticle(String memberId, int boardId) throws SQLException;
+    BoardDto getArticle(int boardId) throws SQLException;
     void updateHit(int boardId) throws SQLException;
     void modifyArticle(@Param("memberId")String memberId, @Param("boardId") int boardId, @Param("request") UpdateBoardRequest request) throws SQLException;
     void deleteArticle(String memberId, int boardId) throws SQLException;

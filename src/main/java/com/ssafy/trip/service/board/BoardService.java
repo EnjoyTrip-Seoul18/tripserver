@@ -11,7 +11,7 @@ import java.util.Map;
 public interface BoardService {
     void writeArticle(String memberId, WriteBoardRequest request) throws Exception;
     BoardListResponse listArticle(Map<String, String> map) throws Exception;
-    BoardDto getArticle(String memberId, int articleNo) throws Exception;
+    BoardDto getArticle(int articleNo) throws Exception;
     void updateHit(int articleNo) throws Exception;
     void modifyArticle(String memberId, int boardId, UpdateBoardRequest request) throws Exception;
     void deleteArticle(String memberId, int boardId) throws Exception;
