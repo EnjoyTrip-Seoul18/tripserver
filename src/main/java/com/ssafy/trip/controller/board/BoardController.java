@@ -1,6 +1,7 @@
 package com.ssafy.trip.controller.board;
 
 import com.ssafy.trip.dto.board.BoardDto;
+import com.ssafy.trip.dto.board.BoardListResponse;
 import com.ssafy.trip.dto.board.WriteBoardRequest;
 import com.ssafy.trip.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,9 +11,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.Charset;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,7 +29,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @Operation(summary = "게시판 글작성", description = "새로운 게시글 정보를 입력한다.")
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<?> writeArticle(
             @RequestAttribute("userId") String memberId,
             @RequestBody @Parameter(description = "", required = true) WriteBoardRequest request) {
@@ -37,23 +43,35 @@ public class BoardController {
         }
     }
 
-//    @Operation(summary = "게시판 글목록", description = "모든 게시글의 정보를 반환한다.")
-//    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "게시글목록 OK!!"),
-//            @ApiResponse(responseCode = "404", description = "페이지없어!!"),
-//            @ApiResponse(responseCode = "500", description = "서버에러!!") })
-//    @GetMapping
-//    public ResponseEntity<?> listArticle(
-//            @RequestParam @Parameter(description = "게시글을 얻기위한 부가정보.", required = true) Map<String, String> map) {
-//        log.info("listArticle map - {}", map);
-//        try {
-//            BoardListDto boardListDto = boardService.listArticle(map);
-//            HttpHeaders header = new HttpHeaders();
-//            header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//            return ResponseEntity.ok().headers(header).body(boardListDto);
-//        } catch (Exception e) {
-//            return exceptionHandling(e);
-//        }
-//    }
+    @Operation(summary = "게시판 글목록", description = "모든 게시글의 정보를 반환한다.")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "게시글목록 OK!!"),
+            @ApiResponse(responseCode = "404", description = "페이지없어!!"),
+            @ApiResponse(responseCode = "500", description = "서버에러!!") })
+    @GetMapping("/list")
+    public ResponseEntity<?> listArticle(
+            @RequestParam @Parameter(description = "게시글을 얻기위한 부가정보.", required = true) Map<String, String> map) {
+        log.info("listArticle map - {}", map);
+        try {
+            BoardListResponse boardList = boardService.listArticle(map);
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            return ResponseEntity.ok().headers(header).body(boardList);
+        } catch (Exception e) {
+            return exceptionHandling(e);
+        }
+    }
+
+    @Operation(summary = "게시판 글보기", description = "글번호에 해당하는 게시글의 정보를 반환한다.")
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardDto> getArticle(
+            @RequestAttribute("userId") String memberId,
+            @PathVariable("boardId") @Parameter(name = "boardId", description = "얻어올 글의 글번호.", required = true) int boardId)
+            throws Exception {
+        log.info("getArticle - 호출 : " + boardId);
+        boardService.updateHit(boardId);
+        return new ResponseEntity<BoardDto>(boardService.getArticle(memberId, boardId), HttpStatus.OK);
+    }
+
 
     private ResponseEntity<String> exceptionHandling(Exception e) {
         e.printStackTrace();

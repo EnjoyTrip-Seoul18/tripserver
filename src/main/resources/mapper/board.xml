@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.trip.mapper.board.BoardMapper">
 
-    <resultMap type="boardDto" id="article">
+    <resultMap type="boardDto" id="articleList">
         <result column="board_id" property="boardId"/>
         <result column="member_id" property="memberId"/>
         <result column="subject" property="subject"/>
@@ -13,6 +13,18 @@
         <result column="register_time" property="registerTime"/>
     </resultMap>
 
+    <resultMap type="boardDto" id="articleDetail">
+        <result column="board_id" property="boardId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="subject" property="subject"/>
+        <result column="content" property="content"/>
+        <result column="hit" property="hit"/>
+        <result column="register_time" property="registerTime"/>
+        <association property="memberName" javaType="String">
+            <id property="memberId" column="member_id" />
+            <result property="memberName" column="member_name"/>
+        </association>
+    </resultMap>
 
     <insert id="writeArticle" parameterType="map">
         insert into board (member_id, subject, content, hit, register_time)
@@ -21,4 +33,44 @@
             select last_insert_id()
         </selectKey>
     </insert>
+
+    <sql id="search">
+        <if test="word != null and word != ''">
+            <if test="key == 'subject'">
+                and subject like concat('%', #{word}, '%')
+            </if>
+            <if test="key != 'subject'">
+                and ${key} = #{word}
+            </if>
+        </if>
+    </sql>
+
+    <select id="listArticle" parameterType="map" resultMap="articleList">
+        select b.board_id, b.member_id, b.subject, b.content, b.hit, b.register_time
+        from board b
+        <include refid="search"></include>
+        order by b.board_id desc
+        limit #{start}, #{listsize}
+    </select>
+
+    <select id="getTotalArticleCount" parameterType="map" resultType="int">
+        select count(board_id)
+        from board
+        <where>
+            <include refid="search"></include>
+        </where>
+    </select>
+
+    <select id="getArticle" parameterType="int" resultMap="articleDetail">
+        select b.board_id, b.member_id, b.subject, b.content, b.hit, b.register_time, m.member_name
+        from board b, member m
+        where b.member_id = m.member_id
+          and b.board_id = #{boardId}
+    </select>
+
+    <update id="updateHit" parameterType="int">
+        update board
+        set hit = hit + 1
+        where board_id = #{boardId}
+    </update>
 </mapper>
