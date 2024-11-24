@@ -2,7 +2,9 @@ package com.ssafy.trip.controller.board;
 
 import com.ssafy.trip.dto.board.BoardDto;
 import com.ssafy.trip.dto.board.BoardListResponse;
+import com.ssafy.trip.dto.board.UpdateBoardRequest;
 import com.ssafy.trip.dto.board.WriteBoardRequest;
+import com.ssafy.trip.dto.member.UpdateMemberRequest;
 import com.ssafy.trip.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -72,6 +74,27 @@ public class BoardController {
         return new ResponseEntity<BoardDto>(boardService.getArticle(memberId, boardId), HttpStatus.OK);
     }
 
+    @Operation(summary = "게시판 글수정", description = "수정할 게시글 정보를 입력한다.(제목, 내용)")
+    @PutMapping("/{boardId}")
+    public ResponseEntity<String> modifyArticle(
+            @RequestAttribute("userId") String memberId,
+            @PathVariable("boardId") @Parameter(name = "boardId", description = "살제할 글의 글번호.", required = true) int boardId,
+            @RequestBody @Parameter(description = "수정할 글정보.", required = true) UpdateBoardRequest request) throws Exception {
+        log.info("modifyArticle - 호출 {}", request);
+
+        boardService.modifyArticle(memberId, boardId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "게시판 글삭제", description = "글번호에 해당하는 게시글의 정보를 삭제한다.")
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<String> deleteArticle(
+            @RequestAttribute("userId") String memberId,
+            @PathVariable("boardId") @Parameter(name = "boardId", description = "살제할 글의 글번호.", required = true) int boardId) throws Exception {
+        log.info("deleteArticle - 호출");
+        boardService.deleteArticle(memberId, boardId);
+        return ResponseEntity.ok().build();
+    }
 
     private ResponseEntity<String> exceptionHandling(Exception e) {
         e.printStackTrace();

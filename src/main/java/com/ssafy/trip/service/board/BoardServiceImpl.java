@@ -2,7 +2,9 @@ package com.ssafy.trip.service.board;
 
 import com.ssafy.trip.dto.board.BoardDto;
 import com.ssafy.trip.dto.board.BoardListResponse;
+import com.ssafy.trip.dto.board.UpdateBoardRequest;
 import com.ssafy.trip.dto.board.WriteBoardRequest;
+import com.ssafy.trip.dto.member.UpdateMemberRequest;
 import com.ssafy.trip.mapper.board.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,13 +53,22 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDto getArticle(String memberId, int articleNo) throws Exception {
-        return boardMapper.getArticle(memberId, articleNo);
+    public BoardDto getArticle(String memberId, int boarId) throws Exception {
+        return boardMapper.getArticle(memberId, boarId);
     }
 
     @Override
-    public void updateHit(int articleNo) throws Exception {
-        boardMapper.updateHit(articleNo);
+    public void updateHit(int boarId) throws Exception {
+        boardMapper.updateHit(boarId);
     }
 
+    @Override
+    public void modifyArticle(String memberId, int boardId, UpdateBoardRequest request) throws Exception {
+        boardMapper.modifyArticle(memberId, boardId, request);
+    }
+
+    @Override
+    public void deleteArticle(String memberId, int boardId) throws Exception {
+        boardMapper.deleteArticle(memberId, boardId);
+    }
 }
