@@ -125,33 +125,19 @@ public class MemberController {
         }
     }
 
-//    @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
-//    @GetMapping("/info")
-//    public ResponseEntity<Map<String, Object>> getInfo(
-//            @RequestAttribute("userId") String memberId) {
-//        log.debug("header : {} ", header);
-//        Map<String, Object> resultMap = new HashMap<>();
-//        HttpStatus status = HttpStatus.ACCEPTED;
-//        String memberId = jwtUtil.getUserId(header);
-//
-////		if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
-//        if (jwtUtil.checkToken(header)) {
-//            log.info("사용 가능한 토큰!!!");
-//            try {
-////				로그인 사용자 정보.
-//                InfoMemberResponse infoMember = memberService.memberInfo(memberId);
-//                resultMap.put("userInfo", infoMember);
-//                status = HttpStatus.OK;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                log.error("정보조회 실패 : {}", e);
-//                resultMap.put("message", e.getMessage());
-//                status = HttpStatus.INTERNAL_SERVER_ERROR;
-//            }
-//        } else {
-//            log.error("사용 불가능 토큰!!!");
-//            status = HttpStatus.UNAUTHORIZED;
-//        }
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//    }
+    @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
+    @GetMapping("/info")
+    public ResponseEntity<Map<String, Object>> getInfo(@RequestAttribute("userId") String memberId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            InfoMemberResponse infoMember = memberService.memberInfo(memberId);
+            resultMap.put("userInfo", infoMember);
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("정보조회 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
