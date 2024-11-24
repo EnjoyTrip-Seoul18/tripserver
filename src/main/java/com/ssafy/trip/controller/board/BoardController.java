@@ -71,7 +71,7 @@ public class BoardController {
             throws Exception {
         log.info("getArticle - 호출 : " + boardId);
         boardService.updateHit(boardId);
-        return new ResponseEntity<BoardDto>(boardService.getArticle(memberId, boardId), HttpStatus.OK);
+        return new ResponseEntity<BoardDto>(boardService.getArticle(boardId), HttpStatus.OK);
     }
 
     @Operation(summary = "게시판 글수정", description = "수정할 게시글 정보를 입력한다.(제목, 내용)")

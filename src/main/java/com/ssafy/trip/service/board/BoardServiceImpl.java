@@ -22,27 +22,29 @@ public class BoardServiceImpl implements BoardService {
     public void writeArticle(String memberId, WriteBoardRequest request) throws Exception {
         boardMapper.writeArticle(memberId, request);
     }
-
     @Override
     public BoardListResponse listArticle(Map<String, String> map) throws Exception {
         Map<String, Object> param = new HashMap<>();
-        param.put("word", map.get("word") == null ? "" : map.get("word"));
-        int currentPage = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
-        int sizePerPage = Integer.parseInt(map.get("spp") == null ? "20" : map.get("spp"));
-        int start = currentPage * sizePerPage - sizePerPage;
+        param.put("word", map.getOrDefault("word", ""));
+        int currentPage = Math.max(1, Integer.parseInt(map.getOrDefault("pgno", "1")));
+        int sizePerPage = Math.max(1, Integer.parseInt(map.getOrDefault("spp", "20")));
+        int start = (currentPage - 1) * sizePerPage;
         param.put("start", start);
         param.put("listsize", sizePerPage);
-
         String key = map.get("key");
-        param.put("key", key == null ? "" : key);
-        if ("user_id".equals(key))
-            param.put("key", key == null ? "" : "b.user_id");
+        if (key != null && !key.isEmpty()) {
+            if ("user_id".equals(key)) {
+                param.put("key", "b.user_id");
+            } else {
+                param.put("key", key);
+            }
+        } else {
+            param.put("key", null); // key가 없을 경우 null로 처리
+        }
         List<BoardDto> list = boardMapper.listArticle(param);
 
-        if ("user_id".equals(key))
-            param.put("key", key == null ? "" : "user_id");
         int totalArticleCount = boardMapper.getTotalArticleCount(param);
-        int totalPageCount = (totalArticleCount - 1) / sizePerPage + 1;
+        int totalPageCount = (totalArticleCount + sizePerPage - 1) / sizePerPage;
 
         BoardListResponse boardList = new BoardListResponse();
         boardList.setArticles(list);
@@ -53,13 +55,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDto getArticle(String memberId, int boarId) throws Exception {
-        return boardMapper.getArticle(memberId, boarId);
+    public BoardDto getArticle(int boardId) throws Exception {
+        return boardMapper.getArticle(boardId);
     }
 
     @Override
-    public void updateHit(int boarId) throws Exception {
-        boardMapper.updateHit(boarId);
+    public void updateHit(int boardId) throws Exception {
+        boardMapper.updateHit(boardId);
     }
 
     @Override
