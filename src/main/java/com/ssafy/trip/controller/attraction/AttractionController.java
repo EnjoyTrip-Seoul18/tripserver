@@ -1,5 +1,7 @@
 package com.ssafy.trip.controller.attraction;
 
+import com.ssafy.trip.dto.attraction.AttractionSearchDto;
+import com.ssafy.trip.dto.attraction.SidoDto;
 import com.ssafy.trip.dto.attraction.gpt.GptRequestDto;
 import com.ssafy.trip.dto.attraction.gpt.GptResponseDto;
 import com.ssafy.trip.dto.attraction.kakao.KakaoTspRequestDto;
@@ -32,14 +34,43 @@ public class AttractionController {
         }
     }
 
-    @PostMapping("/review")
-    public ResponseEntity<?> getReview(@RequestBody List<GptRequestDto> gptRequest) {
+    @GetMapping("/sido")
+    public ResponseEntity<?> getSidos() {
         try {
-            GptResponseDto responseDto = attractionService.gptResponse(gptRequest);
-            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+            return new ResponseEntity<>(attractionService.getSidoList(), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("/gugun/{sidoCode}")
+    public ResponseEntity<?> getGuguns(@PathVariable int sidoCode) {
+        try {
+            return new ResponseEntity<>(attractionService.getGugunList(sidoCode), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("/contentType")
+    public ResponseEntity<?> getContentTypes() {
+        try {
+            return new ResponseEntity<>(attractionService.getContentTypeList(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<?> getList(@RequestBody AttractionSearchDto searchDto) {
+        try {
+            return new ResponseEntity<>(attractionService.getAttractionList(searchDto), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }

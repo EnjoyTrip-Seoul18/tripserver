@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class AttractionDto {
     private Integer attractionId;
     private String name;
+    private String image;
     private String description;
     private String address;
     private Double latitude;
