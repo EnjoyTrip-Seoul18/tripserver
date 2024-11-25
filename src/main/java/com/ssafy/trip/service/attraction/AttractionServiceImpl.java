@@ -1,23 +1,31 @@
 package com.ssafy.trip.service.attraction;
 
+import com.ssafy.trip.dto.attraction.*;
 import com.ssafy.trip.dto.attraction.gpt.GptRequestDto;
 import com.ssafy.trip.dto.attraction.gpt.GptResponseDto;
 import com.ssafy.trip.dto.attraction.kakao.KakaoTspRequestDto;
 import com.ssafy.trip.dto.attraction.kakao.KakaoTspResponseDto;
+import com.ssafy.trip.mapper.attraction.AttractionMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AttractionServiceImpl implements AttractionService {
     private int size;
     private double[][] dp;
     private int[][] parent;
 
     private static final double EARTH_RADIUS = 6371;
+
+    private final AttractionMapper attractionMapper;
 
     @Override
     public KakaoTspResponseDto tsp(List<KakaoTspRequestDto> attractions) {
@@ -46,12 +54,28 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public GptResponseDto gptResponse(List<GptRequestDto> gptRequest) throws Exception {
-        GptResponseDto responseDto = new GptResponseDto();
-        responseDto.setTotal("좋아요");
-        responseDto.setGood("장점");
-        responseDto.setBad("단점");
-        return responseDto;
+    public List<SidoDto> getSidoList() throws Exception {
+        return attractionMapper.getSidoList();
+    }
+
+    @Override
+    public List<GugunDto> getGugunList(int sidoCode) throws Exception {
+        return attractionMapper.getGugunList(sidoCode);
+    }
+
+    @Override
+    public List<ContentTypeDto> getContentTypeList() throws Exception {
+        return attractionMapper.getContentTypeList();
+    }
+
+    @Override
+    public List<AttractionDto> getAttractionList(AttractionSearchDto searchDto) throws Exception {
+        HashMap<String, String> searchMap = new HashMap<>();
+        if(Integer.parseInt(searchDto.getSido()) > 0) searchMap.put("sido_code", searchDto.getSido());
+        if(Integer.parseInt(searchDto.getGugun()) > 0) searchMap.put("gugun_code", searchDto.getGugun());
+        if(Integer.parseInt(searchDto.getContentType()) > 0) searchMap.put("content_type_id", searchDto.getContentType());
+        searchMap.put("keyword", Optional.ofNullable(searchDto.getKeyword()).orElse(""));
+        return attractionMapper.getAttractionList(searchMap);
     }
 
     private void initTsp(List<KakaoTspRequestDto> attractions) {
