@@ -36,19 +36,16 @@
 
     <sql id="search">
         <if test="key != null and key != '' and word != null and word != ''">
-            <choose>
-                <when test="key == 'subject'">
-                    AND subject LIKE CONCAT('%', #{word}, '%')
-                </when>
-                <when test="key == 'user_id'">
-                    AND b.user_id = #{word}
-                </when>
-                <otherwise>
-                    AND ${key} = #{word}
-                </otherwise>
-            </choose>
+            WHERE
+            <if test="key == 'subject'">
+                b.subject LIKE CONCAT('%', #{word}, '%')
+            </if>
+            <if test="key == 'user_id'">
+                b.user_id = #{word}
+            </if>
         </if>
     </sql>
+
 
     <select id="listArticle" parameterType="map" resultMap="articleList">
         select b.board_id, b.member_id, b.subject, b.content, b.hit, b.register_time
@@ -59,11 +56,9 @@
     </select>
 
     <select id="getTotalArticleCount" parameterType="map" resultType="int">
-        select count(board_id)
-        from board
-        <where>
-            <include refid="search"></include>
-        </where>
+        select count(b.board_id)
+        from board b
+        <include refid="search" />
     </select>
 
     <select id="getArticle" parameterType="int" resultMap="articleDetail">
