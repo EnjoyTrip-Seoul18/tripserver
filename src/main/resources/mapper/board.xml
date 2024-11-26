@@ -82,6 +82,6 @@
 
     <delete id="deleteArticle">
         delete from board
-        where board_id = #{boardId} and member_id = #{memberId}
+        where board_id = #{arg1} and member_id = #{arg0}
     </delete>
 </mapper>

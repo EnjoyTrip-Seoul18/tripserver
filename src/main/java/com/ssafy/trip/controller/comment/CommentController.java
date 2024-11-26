@@ -20,7 +20,7 @@ public class CommentController {
 
     @GetMapping("/{commentId}")
     public ResponseEntity<?> getComment(@RequestAttribute("userId") String memberId,
-                                        @PathVariable Integer commentId) {
+                                        @PathVariable("commentId") Integer commentId) {
         try {
             CommentResponseDto responseDto = commentService.getComment(commentId);
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
@@ -32,7 +32,7 @@ public class CommentController {
 
     @GetMapping("/list/{boardId}")
     public ResponseEntity<?> getCommentList(@RequestAttribute("userId") String memberId,
-                                            @PathVariable Integer boardId) {
+                                            @PathVariable("boardId") Integer boardId) {
         try {
             List<CommentResponseDto> responseDto = commentService.getCommentList(boardId);
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
