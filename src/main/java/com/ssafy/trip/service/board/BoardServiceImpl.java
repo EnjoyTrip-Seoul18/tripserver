@@ -9,6 +9,7 @@ import com.ssafy.trip.mapper.board.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,14 +18,12 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardServiceImpl implements BoardService {
     private final BoardMapper boardMapper;
 
     @Override
-    public void writeArticle(String memberId, WriteBoardRequest request) throws Exception {
-        boardMapper.writeArticle(memberId, request);
-    }
-    @Override
+    @Transactional(readOnly = true)
     public BoardListResponse listArticle(Map<String, String> map) throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("word", map.getOrDefault("word", ""));
@@ -56,6 +55,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void writeArticle(String memberId, WriteBoardRequest request) throws Exception {
+        boardMapper.writeArticle(memberId, request);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public BoardDto getArticle(int boardId) throws Exception {
         return boardMapper.getArticle(boardId);
     }
