@@ -7,12 +7,14 @@ import com.ssafy.trip.dto.board.WriteBoardRequest;
 import com.ssafy.trip.dto.member.UpdateMemberRequest;
 import com.ssafy.trip.mapper.board.BoardMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
@@ -31,16 +33,15 @@ public class BoardServiceImpl implements BoardService {
         int start = (currentPage - 1) * sizePerPage;
         param.put("start", start);
         param.put("listsize", sizePerPage);
-        String key = map.get("key");
-        if (key != null && !key.isEmpty()) {
-            if ("user_id".equals(key)) {
-                param.put("key", "b.user_id");
-            } else {
-                param.put("key", key);
-            }
-        } else {
-            param.put("key", null); // key가 없을 경우 null로 처리
+        String word = map.get("word");
+        if (word != null && !word.isEmpty()) {
+            param.put("key", "subject");
         }
+        String userId = map.get("user_id");
+        if (userId != null && !userId.isEmpty()) {
+            param.put("key", "user_id");
+        }
+        log.info("Pagination keyword : {}", param);
         List<BoardDto> list = boardMapper.listArticle(param);
 
         int totalArticleCount = boardMapper.getTotalArticleCount(param);
