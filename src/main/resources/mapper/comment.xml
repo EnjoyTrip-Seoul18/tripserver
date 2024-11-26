@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.trip.mapper.comment.CommentMapper">
+    <resultMap id="commentResponseMap" type="commentResponseDto">
+        <id property="commentId" column="comment_id" />
+        <result property="refId" column="ref_id" />
+        <result property="content" column="content" />
+        <result property="memberId" column="member_id" />
+        <result property="memberName" column="member_name" />
+        <result property="boardId" column="board_id" />
+        <result property="status" column="status" />
+    </resultMap>
+    <select id="getComment" resultMap="commentResponseMap">
+        select comment_id, ref_id, content, member_id, member_name, board_id, status
+        from comment join member using (member_id) where comment_id = #{commentId};
+    </select>
+    <select id="getCommentList" resultMap="commentResponseMap">
+        select comment_id, ref_id, content, member_id, member_name, board_id, status
+        from comment join member using (member_id) where board_id = #{boardId};
+    </select>
+    <insert id="addComment" parameterType="commentInfoDto">
+        insert into comment (member_id, content, board_id)
+        values (#{memberId}, #{comment.content}, #{comment.boardId})
+    </insert>
+    <update id="updateComment" parameterType="commentInfoDto">
+        update comment
+        set content = #{comment.content}
+        where member_id = #{memberId} and board_id = #{comment.boardId} and comment_id = #{comment.commentId}
+    </update>
+    <update id="deleteComment" parameterType="commentDeleteDto">
+        update comment
+        set status = 'N'
+        where member_id = #{memberId} and comment_id = #{commentId}
+    </update>
+</mapper>
