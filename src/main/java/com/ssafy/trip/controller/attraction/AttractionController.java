@@ -45,7 +45,7 @@ public class AttractionController {
     }
 
     @GetMapping("/gugun/{sidoCode}")
-    public ResponseEntity<?> getGuguns(@PathVariable int sidoCode) {
+    public ResponseEntity<?> getGuguns(@PathVariable("sidoCode") int sidoCode) {
         try {
             return new ResponseEntity<>(attractionService.getGugunList(sidoCode), HttpStatus.OK);
         } catch (Exception e) {
