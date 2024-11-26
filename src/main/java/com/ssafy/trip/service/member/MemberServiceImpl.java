@@ -4,12 +4,14 @@ import com.ssafy.trip.dto.member.*;
 import com.ssafy.trip.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
@@ -20,6 +22,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MemberDto login(LoginMemberRequest request) throws Exception {
         return memberMapper.login(request);
     }
@@ -51,12 +54,15 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.deleteMember(memberId);
     }
 
+
     @Override
+    @Transactional(readOnly = true)
     public InfoMemberResponse memberInfo(String memberId) throws Exception {
         return memberMapper.memberInfo(memberId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int idCheck(String memberId) throws Exception {
         return memberMapper.idCheck(memberId);
     }
