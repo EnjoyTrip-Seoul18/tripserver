@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AttractionServiceImplTest {
+class MemberServiceImplTest {
     private AttractionService attractionService;
 
     @BeforeEach
