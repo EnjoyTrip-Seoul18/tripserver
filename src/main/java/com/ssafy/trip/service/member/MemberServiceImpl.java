@@ -3,6 +3,7 @@ package com.ssafy.trip.service.member;
 import com.ssafy.trip.dto.member.*;
 import com.ssafy.trip.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
@@ -33,6 +35,7 @@ public class MemberServiceImpl implements MemberService {
         map.put("memberId", memberId);
         map.put("refreshToken", refreshToken);
 //        System.out.println("memberId: "+ map.get("memberId")+" refreshToken: "+map.get("refreshToken"));
+        log.info("memberId: " + map.get("memberId") + " refreshToken: " + map.get("refreshToken"));
         memberMapper.saveRefreshToken(map);
     }
 
